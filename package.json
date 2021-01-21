@@ -1,15 +1,15 @@
-{
-  "name": "electron-test-app",
-  "version": "1.0.0",
-  "main": "main.js",
-  "author": "Abhayprad Jha",
-  "license": "MIT",
+ {
+  "name":"electron-test-app", 
+  "version":"1.0.0", 
+  "main":"main.js", 
+  "author":"Abhayprad Jha", 
+  "license":"MIT", 
   "scripts": {
-    "start": "electron ."
-  },
+    "start":"electron ."
+  }, 
   "devDependencies": {
-    "dotenv": "^8.2.0",
-    "electron": "^11.1.1"
-  },
+    "dotenv":"^8.2.0", 
+    "electron":"^11.1.1"
+  }, 
   "dependencies": {}
 }
