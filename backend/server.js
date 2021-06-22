@@ -9,6 +9,7 @@ app.use(bodyParser.json());
 let port = 8000;
 
 app.listen(port, () => console.log('Running server on ' + port));
+
 // test if server works
 app.get('/', (req, res, next) => {
     console.log(req.headers);
@@ -17,6 +18,13 @@ app.get('/', (req, res, next) => {
     })
 });
 
+/** STOCK_ITEMS **/
+// GET ALL
+app.get('/api/stock', (req, res, next) => {
+    let resData = "SELECT * FROM "
+});
+
+/* * CUSTOMERS * */
 // GET ALL
 app.get('/api/customers', (req, res, next) => {
     let resData = 'SELECT * FROM customers';
@@ -36,6 +44,7 @@ app.get('/api/customers', (req, res, next) => {
         });
     });
 });
+
 // GET SINGLE
 app.get('/api/customers/:id', (req, res, next) => {
     let params = [req.params.id];
@@ -134,6 +143,9 @@ app.delete("/api/customers/:id", (req, res, next) => {
     })
 });
 
+
+
+// Throw error
 app.use((req, res) => {
     res.status(404)
 });
