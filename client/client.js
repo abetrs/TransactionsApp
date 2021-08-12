@@ -1,16 +1,15 @@
 let table = document.querySelector("#purchases");
-
-
-console.log("table");
-
 let purchaseBtn = document.querySelector("#add-purchase");
 
-//Create
+//GET All
 purchaseBtn.addEventListener('click', () => {
     alert("Adding purchase");
-    
+    fetch('http://localhost:8000/api/customers').then((res) => {
+        console.log(res.json);
+    });
+
 });
-//Read
+//Creat
 
 //Update
 //Delete

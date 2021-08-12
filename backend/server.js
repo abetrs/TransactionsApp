@@ -13,13 +13,14 @@ app.listen(port, () => console.log('Running server on ' + port));
 app.get('/', (req, res, next) => {
     console.log(req.headers);
     res.json({
-        "message": "OK"
+        "message": "OK" 
     })
 });
 
+// Clients 
 // GET ALL
-app.get('/api/customers', (req, res, next) => {
-    let resData = 'SELECT * FROM customers';
+app.get('/api/clients', (req, res, next) => {
+    let resData = 'SELECT * FROM clients';
     let params = [];
     // selects all rows in a table
     db.all(resData, params, (err, rows) => {
@@ -30,16 +31,16 @@ app.get('/api/customers', (req, res, next) => {
             return;
         }
         res.status(200).json({
-            "message": "success",
+                "message": "success",
             "data": rows,
             "cookie": "yum"
         });
     });
 });
 // GET SINGLE
-app.get('/api/customers/:id', (req, res, next) => {
+app.get('/api/clients/:id', (req, res, next) => {
     let params = [req.params.id];
-    let resData = "SELECT * from customers where id = ?";
+    let resData = "SELECT * from clients where id = ?";
     db.get(resData, params, (err, row) => {
         if (err) {
             res.status(400).json({
@@ -55,13 +56,20 @@ app.get('/api/customers/:id', (req, res, next) => {
 })
 
 // POST SINGLE
-app.post('/api/customers', (req, res, next) => {
+app.post('/api/clients', (req, res, next) => {
     let errors = [];
 
-    if (!req.body.first_name) {
-        errors.push('No first name provided');
-    } else if (!req.body.last_name) {
-        errors.push('No last name provided');
+    if ((req.body.cliFirstName == null) ||
+        (req.body.cliLastName == null) ||
+        (req.body.cliPhone == null) ||
+        (req.body.cliEmail == null) ||
+        (req.body.cliAddressStreet == null) ||
+        (req.body.cliAddressCity == null) ||
+        (req.body.cliAddressPCode == null) ||
+        (req.body.cliAddressCity == null) ||
+        (req.body.cliQuotaLeft == null))
+    {
+        errors.push("All parameters not provided");
     }
 
     if (errors.length > 0) {
@@ -71,12 +79,19 @@ app.post('/api/customers', (req, res, next) => {
         return;
     }
     let reqData = {
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        quota: req.body.quota
+        cliFirstName: req.body.cliFirstName,
+        cliLastName: req.body.cliLastName,
+        cliPhone: req.body.cliPhone,
+        cliEmail: req.body.cliEmail,
+        cliAddressStreet: req.body.cliAddressStreet,
+        cliAddressPCode: req.body.cliAddressPCode,
+        cliAddressCity: req.body.cliAddressCity,
+        cliQuotaLeft: req.body.cliQuotaLeft
     } 
-    let params = [req.body.first_name, req.body.last_name, req.body.quota];
-    db.run("INSERT INTO customers (first_name, last_name, quota) VALUES(?,?,?)", params, function(err, result) {
+    let params = [req.body.cliFirstName, req.body.cliLastName, req.body.cliPhone, req.body.cliEmail, req.body.cliAddressStreet,
+    req.body.cliAddressPCode, req.body.cliAddressCity, req.body.cliQuotaLeft];
+    db.run(`INSERT INTO clients (cliFirstName, cliLastName, cliPhone, cliEmail, cliAddressStreet, cliAddressPCode, cliAddressCity, cliQuotaLeft) VALUES(?,?,?,?,?,?,?,?)`,
+            params, function (err, result) {
         if (err) {
             res.status(400).json({
                 "error": err.message
@@ -92,18 +107,29 @@ app.post('/api/customers', (req, res, next) => {
 });
 
 // UPDATE SINGLE
-app.patch('/api/customers/:id', (req, res, next) => {
+app.patch('/api/clients/:id', (req, res, next) => {
     let reqData = {
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        quota: req.body.quota
+        cliFirstName: req.body.cliFirstName,
+        cliLastName: req.body.cliLastName,
+        cliPhone: req.body.cliPhone,
+        cliEmail: req.body.cliEmail,
+        cliAddressStreet: req.body.cliAddressStreet,
+        cliAddressPCode: req.body.cliAddressPCode,
+        cliAddressCity: req.body.cliAddressCity,
+        cliQuotaLeft: req.body.cliQuotaLeft
     };
-    db.run(`UPDATE customers set 
-            first_name = COALESCE(?,first_name),
-            last_name = COALESCE(?,last_name),
-            quota = COALESCE(?,quota)
+    db.run(`UPDATE clients set 
+            cliFirstName = COALESCE(?,cliFirstName),
+            cliLastName = COALESCE(?,cliLastName),
+            cliPhone = COALESCE(?,cliPhone),
+            cliEmail = COALESCE(?,cliEmail),
+            cliAddressStreet = COALESCE(?,cliAddressStreet),
+            cliAddressPCode = COALESCE(?,cliAddressPCode),
+            cliAddressCity = COALESCE(?,cliAddressCity),
+            cliQuotaLeft = COALESCE(?,cliQuotaLeft)
             WHERE id = ?`,
-        [reqData.first_name, reqData.last_name, reqData.quota, req.params.id],
+        [reqData.cliFirstName, reqData.cliLastName, reqData.cliPhone, reqData.cliEmail, reqData.cliAddressStreet,
+        reqData.cliAddressPCode, reqData.cliAddressCity, reqData.cliQuotaLeft, req.params.id],
         function (err, result) {
             if (err) {
                 res.status(400).json({
@@ -119,8 +145,8 @@ app.patch('/api/customers/:id', (req, res, next) => {
         });
 });
 //DELETE
-app.delete("/api/customers/:id", (req, res, next) => {
-    db.run(`DELETE FROM customers WHERE id = ?`, req.params.id, function (err, result) {
+app.delete("/api/clients/:id", (req, res, next) => {
+    db.run(`DELETE FROM clients WHERE id = ?`, req.params.id, function (err, result) {
         if (err) {
             res.status(400).json({
                 "error": err.message

@@ -1,15 +1,14 @@
+// Electron Code
 const { app, BrowserWindow } = require('electron');
-require('dotenv').config;
+require('dotenv').config();
 
-
-let mode = process.env.PRODUCTION_ENV == "dev" ? true : false;
 function createWindow() {
     const win = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
             nodeIntegration: true,
-            devTools: mode
+            devTools: true
         }
     });
 
@@ -29,3 +28,4 @@ app.on('activate', () => {
         createWindow();
     }
 });
+
