@@ -88,8 +88,8 @@ app.post('/api/clients', (req, res, next) => {
         cliAddressCity: req.body.cliAddressCity,
         cliQuotaLeft: req.body.cliQuotaLeft
     } 
-    let params = [req.body.cliFirstName, req.body.cliLastName, req.body.cliPhone, req.body.cliEmail, req.body.cliAddressStreet,
-    req.body.cliAddressPCode, req.body.cliAddressCity, req.body.cliQuotaLeft];
+    let params = [reqData.cliFirstName, reqData.cliLastName, reqData.cliPhone, reqData.cliEmail, reqData.cliAddressStreet,
+    reqData.cliAddressPCode, reqData.cliAddressCity, reqData.cliQuotaLeft];
     db.run(`INSERT INTO clients (cliFirstName, cliLastName, cliPhone, cliEmail, cliAddressStreet, cliAddressPCode, cliAddressCity, cliQuotaLeft) VALUES(?,?,?,?,?,?,?,?)`,
             params, function (err, result) {
         if (err) {
@@ -160,6 +160,139 @@ app.delete("/api/clients/:id", (req, res, next) => {
     })
 });
 
+
+
+
+
+
+
+
+
+// Products 
+// GET ALL
+app.get('/api/products', (req, res, next) => {
+    let resData = 'SELECT * FROM products';
+    let params = [];
+    // selects all rows in a table
+    db.all(resData, params, (err, rows) => {
+        if (err) {
+            res.status(400).json({
+                "error": err.message
+            });
+            return;
+        }
+        res.status(200).json({
+                "message": "success",
+            "data": rows,
+            "cookie": "yum"
+        });
+    });
+});
+// GET SINGLE
+app.get('/api/products/:id', (req, res, next) => {
+    let params = [req.params.id];
+    let resData = "SELECT * from products where id = ?";
+    db.get(resData, params, (err, row) => {
+        if (err) {
+            res.status(400).json({
+                "error": err.message
+            });
+            return;
+        }
+        res.json({
+            "message": "success",
+            "data": row
+        });
+    });
+})
+
+// POST SINGLE
+app.post('/api/products', (req, res, next) => {
+    let errors = [];
+
+    if ((req.body.prodName == null) ||
+        (req.body.prodType == null) ||
+        (req.body.prodPrice == null))
+    {
+        errors.push("All parameters not provided");
+    }
+
+    if (errors.length > 0) {
+        res.status(400).json({
+            "error": errors.join(',')
+        });
+        return;
+    }
+    let reqData = {
+        prodName: req.body.prodName,
+        prodType: req.body.prodType,
+        prodPrice: req.body.prodPrice
+    } 
+    let params = [reqData.prodName, reqData.prodType, reqData.prodPrice];
+    db.run(`INSERT INTO products (prodName, prodType, prodPrice) VALUES(?,?,?)`, params, function (err, result) {
+        if (err) {
+            res.status(400).json({
+                "error": err.message
+            });
+            return;
+        }
+        res.json({
+            "message": "success",
+            "data": reqData,
+            "id": this.lastID
+        })
+    });
+});
+
+// UPDATE SINGLE
+app.patch('/api/products/:id', (req, res, next) => {
+    let reqData = {
+        prodName: req.body.prodName,
+        prodType: req.body.prodType,
+        prodPrice: req.body.prodPrice
+    };
+    db.run(`UPDATE products set 
+            prodName = COALESCE(?,prodName),
+            prodType = COALESCE(?,prodType),
+            prodPrice = COALESCE(?,prodPrice)
+            WHERE id = ?`,
+        [reqData.prodName, reqData.prodType, reqData.prodPrice, req.params.id],
+        function (err, result) {
+            if (err) {
+                res.status(400).json({
+                    "error": err.message
+                });
+                return;
+            }
+            res.json({
+                message: "success",
+                data: reqData,
+                changes: this.changes
+            });
+        });
+});
+// DELETE
+app.delete("/api/products/:id", (req, res, next) => {
+    db.run(`DELETE FROM products WHERE id = ?`, req.params.id, function (err, result) {
+        if (err) {
+            res.status(400).json({
+                "error": err.message
+            });
+            return;
+        }
+        res.json({
+            "message": "deleted",
+            "changes": this.changes
+        })
+    })
+});
+
+app.use('/', (req, res) => {
+    res.status(404).json({
+        'error': 404,
+        'message': 'Not found'
+    })
+})
 app.use((req, res) => {
     res.status(404)
 });
