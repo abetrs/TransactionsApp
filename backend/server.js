@@ -287,6 +287,141 @@ app.delete("/api/products/:id", (req, res, next) => {
     })
 });
 
+
+
+
+
+
+
+
+
+
+// Transactions
+// GET ALL
+app.get('/api/transactions', (req, res, next) => {
+    let resData = 'SELECT * FROM transactions';
+    let params = [];
+    // selects all rows in a table
+    db.all(resData, params, (err, rows) => {
+        if (err) {
+            res.status(400).json({
+                "error": err.message
+            });
+            return;
+        }
+        res.status(200).json({
+                "message": "success",
+            "data": rows,
+            "cookie": "yum"
+        });
+    });
+});
+// GET SINGLE
+app.get('/api/transactions/:id', (req, res, next) => {
+    let params = [req.params.id];
+    let resData = "SELECT * from transactions where id = ?";
+    db.get(resData, params, (err, row) => {
+        if (err) {
+            res.status(400).json({
+                "error": err.message
+            });
+            return;
+        }
+        res.json({
+            "message": "success",
+            "data": row
+        });
+    });
+})
+
+// POST SINGLE
+app.post('/api/transactions', (req, res, next) => {
+    let errors = [];
+
+    if ((req.body.tranProd == null) ||
+        (req.body.tranQuantity == null) ||
+        (req.body.tranClientId == null) ||
+        (req.body.tranDateTime == null))
+    {
+        errors.push("All parameters not provided");
+    }
+
+    if (errors.length > 0) {
+        res.status(400).json({
+            "error": errors.join(',')
+        });
+        return;
+    }
+    let reqData = {
+        tranProd: req.body.tranProd,
+        tranQuantity: req.body.tranQuantity,
+        tranClientId: req.body.tranClientId,
+        tranDateTime: req.body.tranDateTime
+    } 
+    let params = [reqData.tranProd, reqData.tranQuantity, reqData.tranClientId, reqData.tranDateTime];
+    db.run(`INSERT INTO transactions (tranProd, tranQuantity, tranClientId, tranDateTime) VALUES(?,?,?,?)`, params, function (err, result) {
+        if (err) {
+            res.status(400).json({
+                "error": err.message
+            });
+            return;
+        }
+        res.json({
+            "message": "success",
+            "data": reqData,
+            "id": this.lastID
+        })
+    });
+});
+
+// UPDATE SINGLE
+app.patch('/api/transactions/:id', (req, res, next) => {
+    let reqData = {
+        tranProd: req.body.tranProd,
+        tranQuantity: req.body.tranQuantity,
+        tranClientId: req.body.tranClientId,
+        tranDateTime: req.body.tranDateTime
+    };
+    db.run(`UPDATE transactions set 
+            tranProd = COALESCE(?,tranProd),
+            tranQuantity = COALESCE(?,tranQuantity),
+            tranClientId = COALESCE(?,tranClientId),
+            tranDateTime = COALESCE(?,tranDateTime)
+            WHERE id = ?`,
+        [reqData.tranProd, reqData.tranQuantity, reqData.tranClientId, reqData.tranDateTime],
+        function (err, result) {
+            if (err) {
+                res.status(400).json({
+                    "error": err.message
+                });
+                return;
+            }
+            res.json({
+                message: "success",
+                data: reqData,
+                changes: this.changes
+            });
+        });
+});
+// DELETE
+app.delete("/api/transactions/:id", (req, res, next) => {
+    db.run(`DELETE FROM transactions WHERE id = ?`, req.params.id, function (err, result) {
+        if (err) {
+            res.status(400).json({
+                "error": err.message
+            });
+            return;
+        }
+        res.json({
+            "message": "deleted",
+            "changes": this.changes
+        })
+    })
+});
+
+
+
+
 app.use('/', (req, res) => {
     res.status(404).json({
         'error': 404,
