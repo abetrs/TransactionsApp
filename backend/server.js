@@ -424,9 +424,9 @@ app.delete("/api/transactions/:id", (req, res, next) => {
 
 app.use('/', (req, res) => {
     res.status(404).json({
-        'error': 404,
-        'message': 'Not found'
-    })
+        "error": "404",
+        "message": "Page not found"
+    });
 })
 app.use((req, res) => {
     res.status(404)
