@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    <title>Electron Test App</title>
+</head>
+<body>
+    <h1>Commisariat Index</h1>
+    <ul id="topbar">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="./stock.html">Stock</a></li>
+        <li><a href="./purchases.html">Purchases</a></li>
+        <li><button id="refresh" onclick="location.reload()">Refresh</button></li>
+    </ul>
+    <table class="main-table" id="clients">
+        <tr>
+            <th></th>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>Quota Left</th>
+        </tr>
+    </table>
+    <div id='form-area'>    
+        <button id="add-button" onclick='addClientRequest()'>Add client</button>
+        <button id="edit-button" onclick='editClientRequest()'>Edit client</button>
+        <form id='add-client' class='invisible'>
+            <label for="cliFirstName">First name:</label><br/>
+            <input type="text" id="cliFirstName" name="cliFirstName"><br>
+
+            <label for="cliLastName">Last name:</label><br/>
+            <input type="text" id="cliLastName" name="cliLastName"><br>
+
+            <label for="cliPhone">Phone no.:</label><br/>
+            <input type="tel" id="cliPhone" name="cliPhone"><br>
+
+            <label for="cliEmail">Email:</label><br/>
+            <input type="email" name="cliEmail" id="cliEmail"><br>
+
+            <label for="cliAddressStreet">Address Line 1:</label><br/>
+            <input type="text" id="cliAddressStreet" name="cliAddressStreet"><br>
+
+            <label for="cliAddressPCode">Postcode:</label><br/>
+            <input type="number" id="cliAddressPCode" name="cliAddressPCode"><br>
+
+            <label for="cliAddressCity">City/Town:</label><br/>
+            <input type="text" id="cliAddressCity" name="cliAddressCity"><br>
+
+            <label for="cliQuotaLeft">Quota Left:</label><br/>
+            <input type="number" id="cliQuotaLeft" name="cliQuotaLeft" placeholder="5.00">
+            <button type="submit" value="submit">Submit</button>
+        </form>
+        <form id='edit-client' class='invisible'>
+            <label for="id">Id:</label><br>
+            <input type="number" name="id" id="id"><br>
+            
+            <label for="cliFirstName">First name:</label><br/>
+            <input type="text" id="cliFirstName" name="cliFirstName"><br>
+
+            <label for="cliLastName">Last name:</label><br/>
+            <input type="text" id="cliLastName" name="cliLastName"><br>
+
+            <label for="cliPhone">Phone no.:</label><br/>
+            <input type="tel" id="cliPhone" name="cliPhone"><br>
+
+            <label for="cliEmail">Email:</label><br/>
+            <input type="email" name="cliEmail" id="cliEmail"><br>
+
+            <label for="cliAddressStreet">Address Line 1:</label><br/>
+            <input type="text" id="cliAddressStreet" name="cliAddressStreet"><br>
+
+            <label for="cliAddressPCode">Postcode:</label><br/>
+            <input type="text" id="cliAddressPCode" name="cliAddressPCode"><br>
+
+            <label for="cliAddressCity">City/Town:</label><br/>
+            <input type="text" id="cliAddressCity" name="cliAddressCity"><br>
+
+            <label for="cliQuotaLeft">Quota Left:</label><br/>
+            <input type="number" id="cliQuotaLeft" name="cliQuotaLeft" placeholder="5.00">
+            
+            <button type="submit" value="submit">Submit</button>
+        </form>
+    </div>
+        <script src="../src/clients.js"></script>
+</body>
+</html>

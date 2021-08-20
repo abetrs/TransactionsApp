@@ -212,7 +212,8 @@ app.post('/api/products', (req, res, next) => {
 
     if ((req.body.prodName == null) ||
         (req.body.prodType == null) ||
-        (req.body.prodPrice == null))
+        (req.body.prodPrice == null) ||
+        (req.body.prodQuantity == null))
     {
         errors.push("All parameters not provided");
     }
@@ -226,10 +227,11 @@ app.post('/api/products', (req, res, next) => {
     let reqData = {
         prodName: req.body.prodName,
         prodType: req.body.prodType,
-        prodPrice: req.body.prodPrice
+        prodPrice: req.body.prodPrice,
+        prodQuantity: req.body.prodQuantity
     } 
-    let params = [reqData.prodName, reqData.prodType, reqData.prodPrice];
-    db.run(`INSERT INTO products (prodName, prodType, prodPrice) VALUES(?,?,?)`, params, function (err, result) {
+    let params = [reqData.prodName, reqData.prodType, reqData.prodPrice, reqData.prodQuantity];
+    db.run(`INSERT INTO products (prodName, prodType, prodPrice, prodQuantity) VALUES(?,?,?,?)`, params, function (err, result) {
         if (err) {
             res.status(400).json({
                 "error": err.message
@@ -249,14 +251,16 @@ app.patch('/api/products/:id', (req, res, next) => {
     let reqData = {
         prodName: req.body.prodName,
         prodType: req.body.prodType,
-        prodPrice: req.body.prodPrice
+        prodPrice: req.body.prodPrice,
+        prodQuantity: req.body.prodQuantity
     };
     db.run(`UPDATE products set 
             prodName = COALESCE(?,prodName),
             prodType = COALESCE(?,prodType),
-            prodPrice = COALESCE(?,prodPrice)
+            prodPrice = COALESCE(?,prodPrice),
+            prodQuantity = COALESCE(?,prodQuantity)
             WHERE id = ?`,
-        [reqData.prodName, reqData.prodType, reqData.prodPrice, req.params.id],
+        [reqData.prodName, reqData.prodType, reqData.prodPrice, reqData.prodQuantity, req.params.id],
         function (err, result) {
             if (err) {
                 res.status(400).json({

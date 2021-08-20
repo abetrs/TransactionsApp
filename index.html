@@ -4,27 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link href="index.html">
     <title>Electron Test App</title>
 </head>
 <body>
-    <h1>Stock Index</h1>
-    <h2>Clients</h2>
-    <table class="table" id="clients">
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Phone</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>City</th>
-            <th>Quota Left</th>
-        </tr>
-
-    </table>
-    <div>
-        <button type="button" id="get-purchase">Get all purchases</button>
-    </div>
-
-    <script src="./client/client.js"></script>
+  <h1>Commisariat Index</h1>
+    <ul id="topbar">
+        <li><a href="./subpages/clients.html">Clients</a></li>
+        <li><a href="./subpages/stock.html">Stock</a></li>
+        <li><a href="./subpages/purchases.html">Purchases</a></li>
+        <li><button id="refresh" onclick="location.reload()">Refresh</button></li>
+    </ul>
+    <h2>Welcome to the Index.</h2>
+    <h3>Click Below to start.</h3>
 </body>
 </html>

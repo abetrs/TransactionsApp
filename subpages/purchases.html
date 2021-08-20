@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    <title>Electron Test App</title>
+</head>
+<body>
+    <h1>Commisariat Index</h1>
+    <ul id="topbar">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="./clients.html">Clients</a></li>
+        <li><a href="./stock.html">Stock</a></li>
+        <li><button id="refresh" onclick="location.reload()">Refresh</button></li>
+    </ul>
+    <table class="main-table" id="purchases">
+        <tr>
+            <th></th>
+            <th>Id</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Purchaser</th>
+            <th>Date</th>
+        </tr>
+    </table>
+    <div id='form-area'>    
+        <button id="add-button" onclick='addPurchaseRequest()'>Add Purchase</button>
+        <button id="edit-button" onclick='editPurchaseRequest()'>Edit Purchase</button>
+        <form id='add-purchase' class='invisible'>
+            <label for="prodName">Product Name:</label><br/>
+            <input type="text" id="prodName" name="prodName"><br>
+
+            <label for="prodType">Type</label><br/>
+            <input list="prodType" name="prodType"><br>
+            <datalist id="prodType">
+                <option value="Beverage(Alcoholic)">
+                <option value="Beverage(Non-Alcoholic)">
+                <option value="Cigarette">
+                <option value="Sweet">  
+            </datalist>
+
+            <label for="prodPrice">Price of Purchase</label><br/>
+            <input type="number" id="prodPrice" name="prodPrice"><br>
+
+            <label for="prodQuantity">Quantity</label><br/>
+            <input type="number" id="prodQuantity" name="prodQuantity"><br>
+            <button type="submit" value="submit">Submit</button>
+
+        </form>
+        <form id='edit-purchase' class='invisible'>
+            <label for="id">Id:</label><br>
+            <input type="text" name="id" id="id"><br>
+            
+            <label for="prodName">Product Name:</label><br/>
+            <input type="text" id="prodName" name="prodName"><br>
+
+            <label for="prodType">Type</label><br/>
+            <input list="prodType" name="prodType"><br>
+            <datalist id="prodType">
+                <option value="Beverage(Alcoholic)">
+                <option value="Beverage(Non-Alcoholic)">
+                <option value="Cigarette">
+                <option value="Sweet">  
+            </datalist>
+
+            <label for="prodPrice">Price of Purchase</label><br/>
+            <input type="number" id="prodPrice" name="prodPrice"><br>
+
+            <label for="prodQuantity">Quantity</label><br/>
+            <input type="number" id="prodQuantity" name="prodQuantity"><br>
+            <button type="submit" value="submit">Submit</button>
+        </form>
+    </div>
+    <script src="../src/purchases.js"></script>
+</body>
+</html>
