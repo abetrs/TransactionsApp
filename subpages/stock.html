@@ -14,6 +14,7 @@
         <li><a href="./purchases.html">Purchases</a></li>
         <li><button id="refresh" onclick="location.reload()">Refresh</button></li>
     </ul>
+    <h2>Stock</h2>
     <table class="main-table" id="stock">
         <tr>
             <th></th>
@@ -28,22 +29,19 @@
         <button id="add-button" onclick='addStockRequest()'>Add stock</button>
         <button id="edit-button" onclick='editStockRequest()'>Edit stock</button>
         <form id='add-stock' class='invisible'>
-            <label for="prodName">Product Name:</label><br/>
-            <input type="text" id="prodName" name="prodName"><br>
-
-            <label for="prodType">Type</label><br/>
-            <input list="prodType" name="prodType"><br>
-            <datalist id="prodType">
+            <label for="tranProd">Product Name:</label><br/>
+            <input list="tranProd" name="tranProd"><br>
+            <datalist id="tranProd">
                 <option value="Beverage(Alcoholic)">
                 <option value="Beverage(Non-Alcoholic)">
                 <option value="Cigarette">
                 <option value="Sweet">  
             </datalist>
 
-            <label for="prodPrice">Price of Purchase</label><br/>
+            <label for="prodPrice">Price of Purchase:</label><br/>
             <input type="number" id="prodPrice" name="prodPrice"><br>
 
-            <label for="prodQuantity">Quantity</label><br/>
+            <label for="prodQuantity">Quantity:</label><br/>
             <input type="number" id="prodQuantity" name="prodQuantity"><br>
             <button type="submit" value="submit">Submit</button>
 
@@ -51,11 +49,17 @@
         <form id='edit-stock' class='invisible'>
             <label for="id">Id:</label><br>
             <input type="text" name="id" id="id"><br>
-            
-            <label for="prodName">Product Name:</label><br/>
-            <input type="text" id="prodName" name="prodName"><br>
 
-            <label for="prodType">Type</label><br/>
+            <label for="tranProd">Product Name:</label><br/>
+            <input list="tranProd" name="tranProd"><br>
+            <datalist id="tranProd">
+                <option value="Beverage(Alcoholic)">
+                <option value="Beverage(Non-Alcoholic)">
+                <option value="Cigarette">
+                <option value="Sweet">  
+            </datalist>
+
+            <label for="prodType">Type:</label><br/>
             <input list="prodType" name="prodType"><br>
             <datalist id="prodType">
                 <option value="Beverage(Alcoholic)">
@@ -64,10 +68,10 @@
                 <option value="Sweet">  
             </datalist>
 
-            <label for="prodPrice">Price of Purchase</label><br/>
+            <label for="prodPrice">Price of Purchase:</label><br/>
             <input type="number" id="prodPrice" name="prodPrice"><br>
 
-            <label for="prodQuantity">Quantity</label><br/>
+            <label for="prodQuantity">Quantity:</label><br/>
             <input type="number" id="prodQuantity" name="prodQuantity"><br>
             <button type="submit" value="submit">Submit</button>
         </form>

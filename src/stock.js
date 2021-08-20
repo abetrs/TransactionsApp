@@ -89,17 +89,6 @@ function handleSubmitAdd(event) {
 const addForm = document.querySelector('#add-stock');
 addForm.addEventListener('submit', handleSubmitAdd);
 
-function editStockRequest() {
-    if (editFormVisible) {
-        return;
-    } if (addFormVisible) {
-        document.querySelector('.visible').className = 'invisible';
-        addFormVisible = false;
-    }
-    console.log('Editing Stock');
-    document.querySelector('#edit-stock').className = 'visible';
-    editFormVisible = true;
-}
 
 function handleSubmitEdit(event) {
     event.preventDefault();
