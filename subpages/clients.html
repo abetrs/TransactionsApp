@@ -24,7 +24,9 @@
             <th>Email</th>
             <th>Address</th>
             <th>City</th>
-            <th>Quota Left</th>
+            <th>Quota Used</th>
+            <th>Quota</th>
+            <th>Money Owed</th>
         </tr>
     </table>
     <div id='form-area'>    
@@ -52,8 +54,12 @@
             <label for="cliAddressCity">City/Town:</label><br/>
             <input type="text" id="cliAddressCity" name="cliAddressCity"><br>
 
-            <label for="cliQuotaLeft">Quota Left:</label><br/>
-            <input type="number" id="cliQuotaLeft" name="cliQuotaLeft" placeholder="5.00">
+            <label for="cliQuotaUsed">Quota Used:</label><br/>
+            <input type="number" id="cliQuotaUsed" name="cliQuotaUsed" placeholder="5.00"><br>
+            
+            <label for="cliQuota">Designated Quota:</label><br/>
+            <input type="number" id="cliQuota" name="cliQuota" placeholder="5.00">
+            
             <button type="submit" value="submit">Submit</button>
         </form>
         <form id='edit-client' class='invisible'>
@@ -81,8 +87,11 @@
             <label for="cliAddressCity">City/Town:</label><br/>
             <input type="text" id="cliAddressCity" name="cliAddressCity"><br>
 
-            <label for="cliQuotaLeft">Quota Left:</label><br/>
-            <input type="number" id="cliQuotaLeft" name="cliQuotaLeft" placeholder="5.00">
+            <label for="cliQuotaUsed">Quota Used:</label><br/>
+            <input type="number" id="cliQuotaUsed" name="cliQuotaUsed" placeholder="5.00"><br>
+            
+            <label for="cliQuota">Designated Quota:</label><br/>
+            <input type="number" id="cliQuota" name="cliQuota" placeholder="5.00">
             
             <button type="submit" value="submit">Submit</button>
         </form>

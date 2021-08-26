@@ -5,14 +5,19 @@ let editFormVisible = false;
 // GET All Clients
 fetch('http://localhost:8000/api/clients').then(async function (res) {
     let resp = await res.json();
-    console.log(resp);
+    // console.log(resp);
+    let exceeded = "not-exceeded";
+
     var tableAdd = "";
     let data = resp.data;
     for (var i in resp.data) {
         // console.log(i);
         // console.log("doing");
+        if (data[i].cliQuotaUsed > data[i].cliQuota) {
+            exceeded='exceeded'
+        }
         tableAdd +=
-        `<tr id="${data[i].id}" onclick="clientIdClick(${data[i].id})">
+        `<tr id="${data[i].id}" class="${exceeded}" onclick="clientIdClick(${data[i].id})">
             <td><button onclick="clientIdDelete(${data[i].id})">del</button></td>
             <td>${data[i].id}</td>
             <td>${data[i].cliLastName}, ${data[i].cliFirstName}</td>
@@ -20,7 +25,9 @@ fetch('http://localhost:8000/api/clients').then(async function (res) {
             <td>${data[i].cliEmail}</td>
             <td>${data[i].cliAddressStreet}, ${data[i].cliAddressPCode}</td>
             <td>${data[i].cliAddressCity}</td>
-            <td>${data[i].cliQuotaLeft}</td>
+            <td>${data[i].cliQuotaUsed}</td>
+            <td>${data[i].cliQuota}</td>
+            <td>${data[i].cliMoneyOwed}</td>
         </tr>`
         // console.log(tableAdd);
     }
@@ -69,14 +76,26 @@ function handleSubmitAdd(event) {
     event.preventDefault();
     const data = new FormData(event.target);
     const value = Object.fromEntries(data.entries());
-
+    console.log(value)
+    
     fetch('http://localhost:8000/api/clients', {
         method: 'POST',
         headers: {
             'Accept': 'application/json, text/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(value)
+        body: JSON.stringify({
+            cliFirstName: value.cliFirstName,
+            cliLastName: value.cliLastName,
+            cliPhone: value.cliPhone,
+            cliEmail: value.cliEmail,
+            cliAddressStreet: value.cliAddressStreet,
+            cliAddressPCode: value.cliAddressPCode,
+            cliAddressCity: value.cliAddressCity,
+            cliQuotaUsed: value.cliQuotaUsed,
+            cliQuota: value.cliQuota,
+            cliMoneyOwed: "0"
+        })
     }).then(async function (res) {
         console.log(await res.json());
     }).catch((err) => {
@@ -84,8 +103,7 @@ function handleSubmitAdd(event) {
     })
   
 
-    console.log({ value });
-    location.reload();
+    // location.reload();
 }
 const addForm = document.querySelector('#add-client');
 addForm.addEventListener('submit', handleSubmitAdd);
@@ -121,14 +139,15 @@ function handleSubmitEdit(event) {
             cliAddressStreet: value.cliAddressStreet,
             cliAddressPCode: value.cliAddressPCode,
             cliAddressCity: value.cliAddressCity,
-            cliQuotaLeft: value.cliQuotaLeft,            
+            cliQuotaUsed: value.cliQuotaUsed,
+            cliQuota: value.cliQuota,
+            cliMoneyOwed: 0
         })
     }).then(async function (res) {
         console.log(await res.json());
     }).catch((err) => {
         console.log(err);
     })
-  
 
     console.log({ value });
     location.reload();

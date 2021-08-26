@@ -13,21 +13,27 @@
         <li><a href="./clients.html">Clients</a></li>
         <li><a href="./stock.html">Stock</a></li>
         <li><button id="refresh" onclick="location.reload()">Refresh</button></li>
+        <li class="delete-purchase">
+            <input type="password" name="delete-button-pwd" id="delete-button-pwd" placeholder="Enter the password to edit">
+        </li>
+        <li id="submit-button-pwd-li">
+            <button type="submit" id="submit-button-pwd" onclick="onPwdSubmit()">Submit</button>
+        </li>
     </ul>
     <h2>Purchases</h2>
     <table class="main-table" id="purchases">
         <tr>
-            <th></th>
+            <th class="delete-purchase-h"></th>
             <th>Id</th>
             <th>Product</th>
             <th>Quantity</th>
             <th>Purchaser</th>
+            <th>Sale Price</th>
             <th>Date</th>
         </tr>
     </table>
     <div id='form-area'>    
-        <button id="add-button" onclick='addPurchaseRequest()'>Add Purchase</button>
-        <button id="edit-button" onclick='editPurchaseRequest()'>Edit Purchase</button>
+        <button id="add-button" onclick='addPurchaseRequest()' class="delete-purchase-h">Add Purchase</button>
         <form id='add-purchase' class='invisible'>
             <label for="tranProd">Product Name:</label><br/>
             <input list="tranProd" name="tranProd"><br>
@@ -40,29 +46,11 @@
             <label for="tranClientId">Client:</label><br>
             <input list="tranClientId" name="tranClientId"><br>
             <datalist id="tranClientId">
-            </datalist><br>
-            <label for="tranDateTime">Date:</label><br>
-            <input type="date" name="tranDateTime" id="tranDatetime">
-            <button type="submit" value="submit">Submit:</button>
-        </form>
-
-        
-        <form id='edit-purchase' class='invisible'>
-            <label for="id">Id:</label><br>
-            <input type="text" name="id" id="id"><br>
-
-            <label for="tranProd">Product Name:</label><br/>
-            <input list="tranProd" name="tranProd"><br>
-            <datalist id="tranProd">
             </datalist>
+            
+            <label for="tranPrice">Price:</label><br>
+            <input type="text" name="tranPrice" id="tranPrice"><br>
 
-            <label for="tranQuantity">Quantity:</label><br>
-            <input type="number" id="tranQuantity" name="tranQuantity"><br>
-
-            <label for="tranClientId">Client:</label><br>
-            <input list="tranClientId" name="tranClientId"><br>
-            <datalist id="tranClientId">
-            </datalist><br>
             <label for="tranDateTime">Date:</label><br>
             <input type="date" name="tranDateTime" id="tranDatetime">
             <button type="submit" value="submit">Submit:</button>

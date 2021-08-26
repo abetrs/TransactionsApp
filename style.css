@@ -3,6 +3,11 @@ body {
   font-weight: normal;
 }
 
+
+.delete-purchase-h {
+  display: none;
+}
+
 h1 {
   text-align: center;
   font-weight: normal;
@@ -21,7 +26,7 @@ li {
   float: left;
 }
 
-li a, li button {
+li a, #refresh {
   font: inherit;
   background-color: inherit;
   border: none;
@@ -33,7 +38,7 @@ li a, li button {
 }
 
 li a:hover {
-  background-color: rgb(0,0,0);
+  background-color: rgb(0, 0, 0);
 }
 
 #add-button, #edit-button {
@@ -43,8 +48,11 @@ li a:hover {
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
   font-size: 16px;
+}
+
+.exceeded {
+  background-color: red;
 }
 
 .invisible {
@@ -79,4 +87,19 @@ td {
 
 table {
   width: 100%;
+}
+
+#submit-button-pwd-li {
+  font: inherit;
+  background-color: inherit;
+  border: none;
+  display: block;
+  color: white;
+  text-align: center;
+  padding-top: 10px
+}
+
+.delete-purchase {
+  padding-right: 10px;
+  padding-top: 10px;
 }

@@ -66,8 +66,8 @@ app.post('/api/clients', (req, res, next) => {
         (req.body.cliAddressStreet == null) ||
         (req.body.cliAddressCity == null) ||
         (req.body.cliAddressPCode == null) ||
-        (req.body.cliAddressCity == null) ||
-        (req.body.cliQuotaLeft == null))
+        (req.body.cliQuotaUsed == null) ||
+        (req.body.cliQuota == null))
     {
         errors.push("All parameters not provided");
     }
@@ -86,11 +86,13 @@ app.post('/api/clients', (req, res, next) => {
         cliAddressStreet: req.body.cliAddressStreet,
         cliAddressPCode: req.body.cliAddressPCode,
         cliAddressCity: req.body.cliAddressCity,
-        cliQuotaLeft: req.body.cliQuotaLeft
+        cliQuotaUsed: req.body.cliQuotaUsed,
+        cliQuota: req.body.cliQuota,
+        cliMoneyOwed: req.body.cliMoneyOwed
     } 
     let params = [reqData.cliFirstName, reqData.cliLastName, reqData.cliPhone, reqData.cliEmail, reqData.cliAddressStreet,
-    reqData.cliAddressPCode, reqData.cliAddressCity, reqData.cliQuotaLeft];
-    db.run(`INSERT INTO clients (cliFirstName, cliLastName, cliPhone, cliEmail, cliAddressStreet, cliAddressPCode, cliAddressCity, cliQuotaLeft) VALUES(?,?,?,?,?,?,?,?)`,
+    reqData.cliAddressPCode, reqData.cliAddressCity, reqData.cliQuotaUsed, reqData.cliQuota, reqData.cliMoneyOwed];
+    db.run(`INSERT INTO clients (cliFirstName, cliLastName, cliPhone, cliEmail, cliAddressStreet, cliAddressPCode, cliAddressCity, cliQuotaUsed, cliQuota, cliMoneyOwed) VALUES(?,?,?,?,?,?,?,?,?,?)`,
             params, function (err, result) {
         if (err) {
             res.status(400).json({
@@ -116,7 +118,9 @@ app.patch('/api/clients/:id', (req, res, next) => {
         cliAddressStreet: req.body.cliAddressStreet,
         cliAddressPCode: req.body.cliAddressPCode,
         cliAddressCity: req.body.cliAddressCity,
-        cliQuotaLeft: req.body.cliQuotaLeft
+        cliQuotaUsed: req.body.cliQuotaUsed,
+        cliQuota: req.body.cliQuota,
+        cliMoneyOwed: req.body.cliMoneyOwed
     };
     db.run(`UPDATE clients set 
             cliFirstName = COALESCE(?,cliFirstName),
@@ -126,11 +130,13 @@ app.patch('/api/clients/:id', (req, res, next) => {
             cliAddressStreet = COALESCE(?,cliAddressStreet),
             cliAddressPCode = COALESCE(?,cliAddressPCode),
             cliAddressCity = COALESCE(?,cliAddressCity),
-            cliQuotaLeft = COALESCE(?,cliQuotaLeft)
+            cliQuotaUsed = COALESCE(?,cliQuotaUsed),
+            cliQuota = COALESCE(?,cliQuota),
+            cliMoneyOwed = COALESCE(?,cliMoneyOwed)
             WHERE id = ?`,
         [reqData.cliFirstName, reqData.cliLastName, reqData.cliPhone, reqData.cliEmail, reqData.cliAddressStreet,
-        reqData.cliAddressPCode, reqData.cliAddressCity, reqData.cliQuotaLeft, req.params.id],
-        function (err, result) {
+        reqData.cliAddressPCode, reqData.cliAddressCity, reqData.cliQuotaUsed, reqData.cliQuota, reqData.cliMoneyOwed, req.params.id],
+        function (err, result) { 
             if (err) {
                 res.status(400).json({
                     "error": err.message
@@ -345,6 +351,7 @@ app.post('/api/transactions', (req, res, next) => {
     if ((req.body.tranProd == null) ||
         (req.body.tranQuantity == null) ||
         (req.body.tranClientId == null) ||
+        (req.body.tranPrice == null) ||
         (req.body.tranDateTime == null))
     {
         errors.push("All parameters not provided");
@@ -360,10 +367,11 @@ app.post('/api/transactions', (req, res, next) => {
         tranProd: req.body.tranProd,
         tranQuantity: req.body.tranQuantity,
         tranClientId: req.body.tranClientId,
+        tranPrice: req.body.tranPrice,
         tranDateTime: req.body.tranDateTime
     } 
-    let params = [reqData.tranProd, reqData.tranQuantity, reqData.tranClientId, reqData.tranDateTime];
-    db.run(`INSERT INTO transactions (tranProd, tranQuantity, tranClientId, tranDateTime) VALUES(?,?,?,?)`, params, function (err, result) {
+    let params = [reqData.tranProd, reqData.tranQuantity, reqData.tranClientId, reqData.tranPrice, reqData.tranDateTime];
+    db.run(`INSERT INTO transactions (tranProd, tranQuantity, tranClientId, tranPrice, tranDateTime) VALUES(?,?,?,?,?)`, params, function (err, result) {
         if (err) {
             res.status(400).json({
                 "error": err.message
@@ -384,15 +392,17 @@ app.patch('/api/transactions/:id', (req, res, next) => {
         tranProd: req.body.tranProd,
         tranQuantity: req.body.tranQuantity,
         tranClientId: req.body.tranClientId,
+        tranPrice: req.body.tranPrice,
         tranDateTime: req.body.tranDateTime
     };
     db.run(`UPDATE transactions set 
             tranProd = COALESCE(?,tranProd),
             tranQuantity = COALESCE(?,tranQuantity),
             tranClientId = COALESCE(?,tranClientId),
+            tranPrice = COALESCE(?,tranPrice),
             tranDateTime = COALESCE(?,tranDateTime)
             WHERE id = ?`,
-        [reqData.tranProd, reqData.tranQuantity, reqData.tranClientId, reqData.tranDateTime],
+        [reqData.tranProd, reqData.tranQuantity, reqData.tranClientId, reqData.tranPrice, reqData.tranDateTime],
         function (err, result) {
             if (err) {
                 res.status(400).json({

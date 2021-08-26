@@ -1,14 +1,11 @@
 let table = document.querySelector("#purchases");
 let addFormVisible = false;
-let editFormVisible = false;
 let addProdList = document.querySelector("#tranProd");
 let addClientList = document.querySelector("#tranClientId")
 let prodListMatcherName = [];
 let prodListMatcherId = [];
 let clientListMatcherName = [];
 let clientListMatcherId = [];
-
-
 
 fetch('http://localhost:8000/api/products').then(async function (res) {
     let resp = await res.json();
@@ -79,11 +76,12 @@ fetch('http://localhost:8000/api/transactions').then(async function (res) {
         // console.log(product);
         tableAdd +=
         `<tr id="${data[i].id}" onclick="tranIdClick(${data[i].id})">
-            <td><button onclick="tranIdDelete(${data[i].id})">del</button></td>
+            <td class="delete-purchase-h"><button onclick="tranIdDelete(${data[i].id})">del</button></td>
             <td>${data[i].id}</td>
             <td>${product}</td>
             <td>${data[i].tranQuantity}</td>
             <td>${client}</td>
+            <td>${data[i].tranPrice}</td>
             <td>${data[i].tranDateTime}</td>
         </tr>`
         // console.log(tableAdd);
@@ -98,6 +96,7 @@ function tranIdClick(tranId) {
 
 function tranIdDelete(tranId) {
     console.log(tranId);
+    
     fetch('http://localhost:8000/api/transactions/' + tranId, {
         method: 'DELETE',
     }).then(async function (res) {
@@ -110,9 +109,6 @@ function tranIdDelete(tranId) {
 function addPurchaseRequest() {
     if (addFormVisible) {
         return;
-    } if (editFormVisible) {
-        document.querySelector('.visible').className = 'invisible';
-        editFormVisible = false;
     }
     console.log('Adding purchase');
     document.querySelector('#add-purchase').className = 'visible';
@@ -120,23 +116,14 @@ function addPurchaseRequest() {
 
 }
 
-function editPurchaseRequest() {
-    if (editFormVisible) {
-        return;
-    } if (addFormVisible) {
-        document.querySelector('.visible').className = 'invisible';
-        addFormVisible = false;
-    }
-    console.log('Editing purchase');
-    document.querySelector('#edit-purchase').className = 'visible';
-    editFormVisible = true;
-}
-
 function handleSubmitAdd(event) {
     event.preventDefault();
     let prodName = new FormData(event.target).get("tranProd")
     let prodIndex = prodListMatcherName.indexOf(prodName);
+    let moneyOwed = 0;
+    let tranPrice; 
 
+    let cliData;
     let cliName = new FormData(event.target).get("tranClientId");
     let cliIndex = clientListMatcherName.indexOf(cliName);
     // console.log(prodIndex);
@@ -153,59 +140,76 @@ function handleSubmitAdd(event) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            tranProd: prodId,
+            tranProd: prodId.toString(),
             tranQuantity: value.tranQuantity,
-            tranClientId: cliId,
+            tranClientId: cliId.toString(),
+            tranPrice: value.tranPrice,
             tranDateTime: value.tranDateTime
         })
     }).then(async function (res) {
         console.log(await res.json());
+        console.log(cliId);
+        tranPrice = parseFloat(value.tranPrice);
+        console.log(tranPrice);
     }).catch((err) => {
         console.log(err);
-    })
-  
+    });
+    console.log(cliId);
+    fetch('http://localhost:8000/api/clients/' + cliId, { method: 'GET' }).then(async function (res) {
+        let resp = await res.json();
+        console.log(resp.data);
+        cliData = resp.data;
+        console.log(cliData);
 
+        moneyOwed = parseFloat(cliData.cliMoneyOwed) + tranPrice
+        console.log(moneyOwed);
+        fetch('http://localhost:8000/api/clients/' + cliId, {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'application/json, text/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cliFirstName: cliData.cliFirstName,
+                cliLastName: cliData.cliLastName,
+                cliPhone: cliData.cliPhone,
+                cliEmail: cliData.cliEmail,
+                cliAddressStreet: cliData.cliAddressStreet,
+                cliAddressPCode: cliData.cliAddressPCode,
+                cliAddressCity: cliData.cliAddressCity,
+                cliQuotaUsed: cliData.cliQuotaUsed,
+                cliQuota: cliData.cliQuota,
+                cliMoneyOwed: moneyOwed.toString()
+            })
+        }).then((res) => console.log(res.json())).catch((err) => console.log(err.message));
+    // */
+    }).catch((err) => console.log(err.message))
+    
     console.log({ value });
-    location.reload();
+    // location.reload();
+
 }
 const addForm = document.querySelector('#add-purchase');
 addForm.addEventListener('submit', handleSubmitAdd);
 
 
-function handleSubmitEdit(event) {
-    event.preventDefault();
-    let prodName = new FormData(event.target).getAll("tranProd")[1];
-    let prodIndex = prodListMatcherName.indexOf(prodName);
 
-    let cliName = new FormData(event.target).getAll("tranClientId")[1];
-    let cliIndex = clientListMatcherName.indexOf(cliName);
-    // console.log(prodIndex);
-    // console.log(cliIndex)
-    let prodId = prodListMatcherId[prodIndex];
-    let cliId = clientListMatcherId[cliIndex];
-    const data = new FormData(event.target);
-    const value = Object.fromEntries(data.entries());
 
-    fetch('http://localhost:8000/api/transactions/'+ value.id, {
-        method: 'PATCH',
-        headers: {
-            'Accept': 'application/json, text/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            tranProd: prodId,
-            tranQuantity: value.tranQuantity,
-            tranClientId: cliId,
-            tranDateTime: value.tranDateTime   
-        })
-    }).then(async function (res) {
-        console.log(await res.json());
-    }).catch((err) => {
-        console.log(err);
-    })
-  
 
-    console.log({ value });
+let deletePurchaseInp = document.getElementById('delete-button-pwd');
+let deletePurchaseB = document.getElementById("submit-button-pwd")
+console.log(deletePurchaseInp);
+console.log(deletePurchaseB);
+
+function onPwdSubmit() {
+    // console.log(deletePurchaseInp.value);
+    //if (deletePurchaseInp.value == "password") {
+        let deleteButtons = document.querySelectorAll(".delete-purchase-h");
+        for (let d in deleteButtons) {
+            deleteButtons[d].className = "";
+            // console.log(deleteButtons[d]);
+        }
+    //} else {
+        // alert("Wrong password");
+    //}
 }
-const editForm = document.querySelector('#edit-purchase');
-editForm.addEventListener('submit', handleSubmitEdit);
