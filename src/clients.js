@@ -34,9 +34,12 @@ fetch('http://localhost:8000/api/clients').then(async function (res) {
     table.innerHTML = table.innerHTML + tableAdd;
 });
 
-function clientIdClick(clientId) {
-    console.log(clientId)
-}
+
+// function clientIdClick(clientId) {
+    // console.log(clientId)
+// }
+
+// Deletes a client
 
 function clientIdDelete(clientId) {
     console.log(clientId);
@@ -48,6 +51,8 @@ function clientIdDelete(clientId) {
     });
 }
 
+
+// Makes the client addition menu visible
 function addClientRequest() {
     if (addFormVisible) {
         return;
@@ -60,24 +65,14 @@ function addClientRequest() {
     addFormVisible = true;
 }
 
-function editClientRequest() {
-    if (editFormVisible) {
-        return;
-    } if (addFormVisible) {
-        document.querySelector('.visible').className = 'invisible';
-        addFormVisible = false;
-    }
-    console.log('Editing Client');
-    document.querySelector('#edit-client').className = 'visible';
-    editFormVisible = true;
-}
-
+// Send request to add a client to the server
 function handleSubmitAdd(event) {
     event.preventDefault();
+    // Converts form data to JSON
     const data = new FormData(event.target);
     const value = Object.fromEntries(data.entries());
     console.log(value)
-    
+    // Fetching from server
     fetch('http://localhost:8000/api/clients', {
         method: 'POST',
         headers: {
@@ -105,8 +100,10 @@ function handleSubmitAdd(event) {
 
     // location.reload();
 }
-const addForm = document.querySelector('#add-client');
+
+const addForm = document.querySelector('#add-client'); // Reference to the client addition form's HTML element
 addForm.addEventListener('submit', handleSubmitAdd);
+
 
 function editClientRequest() {
     if (editFormVisible) {
@@ -120,11 +117,13 @@ function editClientRequest() {
     editFormVisible = true;
 }
 
+// Makes the edit client menu visible
 function handleSubmitEdit(event) {
     event.preventDefault();
+    // Converts form data to JSON
     const data = new FormData(event.target);
     const value = Object.fromEntries(data.entries());
-
+    // Sends PATCH request to server
     fetch('http://localhost:8000/api/clients/'+ value.id, {
         method: 'PATCH',
         headers: {
@@ -152,5 +151,47 @@ function handleSubmitEdit(event) {
     console.log({ value });
     location.reload();
 }
-const editForm = document.querySelector('#edit-client');
+const editForm = document.querySelector('#edit-client'); // Reference to the html element of the client editing form
 editForm.addEventListener('submit', handleSubmitEdit);
+
+function clientIdClick(cliId) {
+    let receipt = document.querySelector('#receipt');
+    console.log(receipt);
+    console.log(cliId);
+    let generatedHTML = `
+    <tr>
+        <th>Date of Sale</th>
+        <th>Name of the Item</th>
+        <th>Price</th>
+    </tr>
+    `
+    fetch('http://localhost:8000/api/transactions').then(async function (res) {
+        let product = '';
+        let resp = await res.json();
+        console.log(resp);
+        var tableAdd = "";
+        let data = resp.data;
+        let totalPrice = 0;
+        
+        for (var i in data) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", 'http://localhost:8000/api/products/' + data[i].tranProd, false); // false for synchronous request
+            xmlHttp.send(null);
+            product = JSON.parse(xmlHttp.responseText).data.prodName;
+            console.log(data[i])
+            if (data[i].tranClientId == cliId) {
+                totalPrice += parseInt(data[i].tranPrice);
+                generatedHTML += `
+                <tr>
+                <td>${data[i].tranDateTime}</td>
+                        <td>${product}</td>
+                        <td>${data[i].tranPrice}</td>
+                    </tr>
+                `
+                console.log(generatedHTML);
+            }
+        }
+        receipt.innerHTML = receipt.innerHTML + generatedHTML;
+        receipt.innerHTML += "<tr><td>Total Money Owed: " + totalPrice + "</td></tr>";
+    });
+}

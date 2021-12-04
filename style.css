@@ -4,7 +4,7 @@ body {
 }
 
 
-.delete-purchase-h {
+.delete-sale-h {
   display: none;
 }
 
@@ -99,7 +99,11 @@ table {
   padding-top: 10px
 }
 
-.delete-purchase {
+.delete-sale {
   padding-right: 10px;
   padding-top: 10px;
+}
+
+#receipt { 
+  padding-top: 20px;
 }

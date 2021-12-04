@@ -1,4 +1,4 @@
-let table = document.querySelector("#purchases");
+let table = document.querySelector("#sales");
 let addFormVisible = false;
 let addProdList = document.querySelector("#tranProd");
 let addClientList = document.querySelector("#tranClientId")
@@ -6,6 +6,7 @@ let prodListMatcherName = [];
 let prodListMatcherId = [];
 let clientListMatcherName = [];
 let clientListMatcherId = [];
+let currentTranId;
 
 fetch('http://localhost:8000/api/products').then(async function (res) {
     let resp = await res.json();
@@ -76,13 +77,14 @@ fetch('http://localhost:8000/api/transactions').then(async function (res) {
         // console.log(product);
         tableAdd +=
         `<tr id="${data[i].id}" onclick="tranIdClick(${data[i].id})">
-            <td class="delete-purchase-h"><button onclick="tranIdDelete(${data[i].id})">del</button></td>
+            <td class="delete-sale-h"><button onclick="tranIdDelete(${data[i].id})">del</button></td>
             <td>${data[i].id}</td>
             <td>${product}</td>
             <td>${data[i].tranQuantity}</td>
             <td>${client}</td>
             <td>${data[i].tranPrice}</td>
             <td>${data[i].tranDateTime}</td>
+            <td>${data[i].tranPaidStatus}<input type="checkbox" onClick="checkbox(${data[i].id})"></input></td>
         </tr>`
         // console.log(tableAdd);
     }
@@ -91,7 +93,9 @@ fetch('http://localhost:8000/api/transactions').then(async function (res) {
 });
 
 function tranIdClick(tranId) {
+
     console.log(tranId)
+    currentTranId = tranId;
 }
 
 function tranIdDelete(tranId) {
@@ -106,14 +110,27 @@ function tranIdDelete(tranId) {
 
 }
 
-function addPurchaseRequest() {
+function addSaleRequest() {
     if (addFormVisible) {
         return;
     }
-    console.log('Adding purchase');
-    document.querySelector('#add-purchase').className = 'visible';
+    console.log('Adding sale');
+    document.querySelector('#add-sale').className = 'visible';
     addFormVisible = true;
 
+}
+
+function checkbox(id) {
+    fetch('http://localhost:8000/api/transactions/paid/' + id, {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'application/json, text/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                tranPaidStatus: "Paid"
+            })
+    }).then((res) => console.log(res.json())).catch((err) => console.log(err.message));
 }
 
 function handleSubmitAdd(event) {
@@ -189,23 +206,24 @@ function handleSubmitAdd(event) {
     // location.reload();
 
 }
-const addForm = document.querySelector('#add-purchase');
+const addForm = document.querySelector('#add-sale');
 addForm.addEventListener('submit', handleSubmitAdd);
 
 
 
 
 
-let deletePurchaseInp = document.getElementById('delete-button-pwd');
-let deletePurchaseB = document.getElementById("submit-button-pwd")
-console.log(deletePurchaseInp);
-console.log(deletePurchaseB);
+let deletesaleInp = document.getElementById('delete-button-pwd');
+let deletesaleB = document.getElementById("submit-button-pwd")
+console.log(deletesaleInp);
+console.log(deletesaleB);
 
 function onPwdSubmit() {
-    // console.log(deletePurchaseInp.value);
-    //if (deletePurchaseInp.value == "password") {
-        let deleteButtons = document.querySelectorAll(".delete-purchase-h");
+    // console.log(deletesaleInp.value);
+    //if (deletesaleInp.value == "password") {
+        let deleteButtons = document.querySelectorAll(".delete-sale-h");
         for (let d in deleteButtons) {
+            
             deleteButtons[d].className = "";
             // console.log(deleteButtons[d]);
         }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    <title>Electron Test App</title>
+</head>
+<body>
+    <h1>Commisariat Index</h1>
+    <ul id="topbar">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="./clients.html">Clients</a></li>
+        <li><a href="./stock.html">Stock</a></li>
+        <li><a href="./sales.html">Sales</a></li>
+        <li><button id="refresh" onclick="location.reload()">Refresh</button></li>
+    </ul>
+    <h2>Report</h2>
+    <table class="main-table" id="sales">
+        <tr>
+            <th>Product</th>
+            <th>Revenue</th>
+            <th>Quantity</th>
+        </tr>
+    </table>
+    <script src="../src/report.js"></script>
+</body>
+</html>
