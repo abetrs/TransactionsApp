@@ -27,7 +27,6 @@ fetch('http://localhost:8000/api/clients').then(async function (res) {
             <td>${data[i].cliAddressCity}</td>
             <td>${data[i].cliQuotaUsed}</td>
             <td>${data[i].cliQuota}</td>
-            <td>${data[i].cliMoneyOwed}</td>
         </tr>`
         // console.log(tableAdd);
     }
@@ -191,7 +190,7 @@ function clientIdClick(cliId) {
                 console.log(generatedHTML);
             }
         }
-        receipt.innerHTML = receipt.innerHTML + generatedHTML;
+        receipt.innerHTML = generatedHTML;
         receipt.innerHTML += "<tr><td>Total Money Owed: " + totalPrice + "</td></tr>";
     });
 }

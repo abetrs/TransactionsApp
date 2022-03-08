@@ -7,7 +7,7 @@
     <title>Electron Test App</title>
 </head>
 <body>
-    <h1>Commisariat Index</h1>
+    <h1>Sales Management System</h1>
     <ul id="topbar">
         <li><a href="../index.html">Home</a></li>
         <li><a href="./clients.html">Clients</a></li>
@@ -27,13 +27,13 @@
             <th>Id</th>
             <th>Product</th>
             <th>Quantity</th>
-            <th>Purchaser</th>
+            <th>Client</th>
             <th>Sale Price</th>
             <th>Date</th>
             <th>Paid Status</th>
         </tr>
     </table>
-    <div id='form-area'>    
+    <div id='form-area'>
         <button id="add-button" onclick='addSaleRequest()' class="delete-sale-h">Add sale</button>
         <form id='add-sale' class='invisible'>
             <label for="tranProd">Product Name:</label><br/>
@@ -66,7 +66,7 @@
         </form>
     </div>
         <br><br>
-    <a id='add-button' href="./report.html">Annual Report</a>
+    <a id='add-button' href="./report.html">Generate Sales Report</a>
     <br><br><br><br>
     <script src="../src/sales.js"></script>
 </body>

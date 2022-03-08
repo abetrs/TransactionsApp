@@ -76,8 +76,8 @@ th {
   padding: 1%;
 }
 
-th:hover, td:hover{
-  background-color: #e6e6e6;
+tr:hover {
+  filter: darken(75%);
   cursor: default;
 }
 

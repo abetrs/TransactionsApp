@@ -27,7 +27,46 @@ fetch('http://localhost:8000/api/products').then(async function (res) {
 });
 
 function stockIdClick(stockId) {
+    let receipt = document.querySelector('#receipt');
     console.log(stockId)
+    console.log(receipt);
+    let generatedHTML= `
+    <tr>
+        <th>Date Last Purchased</th>
+        <th>Clients</th>
+        <th>Quantity</th>
+    </tr>
+    `
+    fetch('http://localhost:8000/api/transactions').then(async function (res) {
+        let client = '';
+        let resp = await res.json();
+        console.log(resp);
+        var tableAdd = "";
+        let data = resp.data;
+        let quantity = 0;
+        
+        for (var i in data) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", 'http://localhost:8000/api/clients/' + data[i].tranClientId, false); // false for synchronous request
+            xmlHttp.send(null);
+            client += JSON.parse(xmlHttp.responseText).data.cliFirstName;
+            client += ' ' + JSON.parse(xmlHttp.responseText).data.cliLastName + ', ';
+            console.log(data[i])
+            if (data[i].tranProd == stockId) {
+                quantity += parseInt(data[i].tranQuantity);
+                generatedHTML += `
+                <tr>
+                    <td>${data[i].tranDateTime}</td>
+                    <td>${client}</td>
+                    <td>${quantity}</td>
+                </tr>
+                `
+                console.log(generatedHTML);
+            }
+        }
+        receipt.innerHTML =  generatedHTML;
+        receipt.innerHTML += "<tr><td>Total Quantity: " + quantity + "</td></tr>";
+    });
 }
 
 function stockIdDelete(stockId) {

@@ -451,13 +451,23 @@ app.delete("/api/transactions/:id", (req, res, next) => {
 
 app.patch('/api/transactions/paid/:id', (req, res, next) => {
     
-    let reqData = {
-    tranPaidStatus: req.body.tranPaidStatus
-    };
-
-    db.run(`UPDATE transactions set
-            tranPaidStatus = COALESCE(?, tranPaidStatus)
-            WHERE id = ?`,
+    let currentStatus;
+    let newStatus;
+    db.all(`SELECT tranPaidStatus FROM transactions WHERE id=?`, req.params.id, function (err, row) {
+        // console.log(row[0].tranPaidStatus);
+        currentStatus = row[0].tranPaidStatus
+        if (currentStatus == "Paid") {
+            newStatus = "Not Paid"
+        } else {
+            newStatus = "Paid"
+        }
+        let reqData = {
+            tranPaidStatus: newStatus
+        };
+        
+        db.run(`UPDATE transactions set
+        tranPaidStatus = COALESCE(?, tranPaidStatus)
+        WHERE id = ?`,
         [reqData.tranPaidStatus, req.params.id],
         function (err, result) {
             if (err) {
@@ -472,10 +482,24 @@ app.patch('/api/transactions/paid/:id', (req, res, next) => {
                 changes: this.changes
             });
         });
-
+    });     
 });
 
 
+app.get('/date-report/:date/', (req, res, next) => {
+    db.all(`SELECT tranProd, tranPrice, tranQuantity from transactions where tranDateTime > ? order by tranProd;`, req.params.date, function (err, row) {
+        if (err) {
+            res.status(400).json({
+                'error': err.message
+            });
+            return;
+        }
+        res.json({
+            message: "success",
+            data: row
+        });
+    })
+});
 
 app.use('/', (req, res) => {
     res.status(404).json({

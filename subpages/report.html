@@ -7,7 +7,7 @@
     <title>Electron Test App</title>
 </head>
 <body>
-    <h1>Commisariat Index</h1>
+    <h1>Sales Management System</h1>
     <ul id="topbar">
         <li><a href="../index.html">Home</a></li>
         <li><a href="./clients.html">Clients</a></li>
@@ -16,12 +16,11 @@
         <li><button id="refresh" onclick="location.reload()">Refresh</button></li>
     </ul>
     <h2>Report</h2>
-    <table class="main-table" id="sales">
-        <tr>
-            <th>Product</th>
-            <th>Revenue</th>
-            <th>Quantity</th>
-        </tr>
+
+    <input type="date" name="date" id="date-input">
+    <button onClick="updateDate()">Submit</button>
+
+    <table class="main-table" id="report">
     </table>
     <script src="../src/report.js"></script>
 </body>
